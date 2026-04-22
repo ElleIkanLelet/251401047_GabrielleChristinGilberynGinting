@@ -8,7 +8,7 @@ int main() {
     cout << "Masukkan nomor kartu digital: ";
     cin >> NK;
 
-    // hitung panjang manual (tanpa strlen)
+    // hitung panjang manual
     while (NK[panjang] != '\0') {
         panjang++;
     }
@@ -55,7 +55,6 @@ int main() {
 // di awal program saya minta input nomor kartu digital
 // nomor kartu disimpan dalam bentuk array karakter (char)
 
-// karena tidak menggunakan string atau strlen,
 // saya menghitung panjang kartu secara manual
 // dengan membaca satu per satu sampai menemukan '\0'
 
