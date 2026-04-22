@@ -21,7 +21,7 @@ int main() {
                   (kode[6] - '0') * 10 +
                   (kode[7] - '0');
 
-    // validasi kode
+    // validasi kodenya
     if (!((hariKode == 1 || hariKode == 2 || hariKode == 3) &&
           (loyalKode == 1 || loyalKode == 2 || loyalKode == 3))) {
         cout << "Kode tidak valid." << endl;
@@ -78,7 +78,7 @@ int main() {
 // di awal program saya minta input kode transaksi 8 digit
 // kode ini menyimpan informasi hari, jenis pelanggan, dan jumlah belanja
 
-// karena tidak menggunakan string, saya ambil tiap digit dari array char
+// saya ambil tiap digit dari array char
 // lalu saya ubah ke angka dengan cara (kode[i] - '0')
 
 // 2 digit pertama saya gunakan untuk menentukan jenis hari
