@@ -1,82 +1,87 @@
 #include <iostream>
-#include <string>    
 using namespace std;
 
 int main() {
-    string NK, jenisKartu;  
-    int panjang, total = 0; 
+    char NK[20];   // menyimpan nomor kartu
+    int panjang = 0, total = 0;
 
     cout << "Masukkan nomor kartu digital: ";
     cin >> NK;
 
-    panjang = NK.length();        // hitung panjang kartu
-    string awalan = NK.substr(0, 2); // ambil 2 digit awal
+    // hitung panjang manual (tanpa strlen)
+    while (NK[panjang] != '\0') {
+        panjang++;
+    }
 
-    // untuk menentukan jenis kartu
-    if (panjang == 14 && awalan == "65") {
-        jenisKartu = "NUSANTARA";
+    // cek jenis kartu berdasarkan panjang & awalan
+    if (panjang == 14 && NK[0] == '6' && NK[1] == '5') {
+        cout << "Tipe kartu: NUSANTARA" << endl;
     }
-    else if (panjang == 16 && (awalan == "77" || awalan == "78")) {
-        jenisKartu = "GARUDA";
+    else if (panjang == 16 &&
+            ((NK[0] == '7' && NK[1] == '7') ||
+             (NK[0] == '7' && NK[1] == '8'))) {
+        cout << "Tipe kartu: GARUDA" << endl;
     }
-    else if (panjang == 15 && awalan == "91") {
-        jenisKartu = "MERDEKA";
+    else if (panjang == 15 && NK[0] == '9' && NK[1] == '1') {
+        cout << "Tipe kartu: MERDEKA" << endl;
     }
     else {
-        jenisKartu = "TIDAK DIKENAL"; // jika tidak sesuai pola
-    }
-
-    cout << "Tipe kartu: " << jenisKartu << endl;
-
-    if (jenisKartu == "TIDAK DIKENAL") { // jika kartu tidak dikenali
+        cout << "Tipe kartu: TIDAK DIKENAL" << endl;
         cout << "Nomor kartu TIDAK VALID." << endl;
-        return 0; // program selesai
+        return 0;
     }
 
-    // proses validasi (algoritma Luhn)
-    for (int i = panjang - 1; i >= 0; i--) { // loop dari belakang
-        int angka = NK[i] - '0'; // ubah char ke angka
-
-        if ((panjang - i) % 2 == 0) { // posisi selang-seling
-            angka *= 2; // dikali 2
-            if (angka > 9)
-                angka = (angka / 10) + (angka % 10); // jumlah digit
-        }
-
-        total += angka; // tambahkan ke total
+    // algoritma Luhn
+    for (int i = panjang - 1; i >= 0; i -= 2) {
+        total += NK[i] - '0'; // ambil digit langsung
     }
 
-    if (total % 10 == 0) // cek kelipatan 10
+    for (int i = panjang - 2; i >= 0; i -= 2) {
+        int angka = (NK[i] - '0') * 2;
+        if (angka > 9)
+            angka = (angka / 10) + (angka % 10);
+        total += angka;
+    }
+
+    // cek validasi
+    if (total % 10 == 0)
         cout << "Nomor kartu VALID." << endl;
     else
         cout << "Nomor kartu TIDAK VALID." << endl;
 
-    return 0; // akhir program
+    return 0;
 }
 
-// di awal program saya langsung minta input nomor kartu dalam bentuk string
-// supaya setiap digitnya bisa diakses satu per satu
+// di awal program saya minta input nomor kartu digital
+// nomor kartu disimpan dalam bentuk array karakter (char)
 
-// lalu saya ambil panjang kartu dan 2 digit awal (awalan)
-// ini digunakan untuk menentukan jenis kartu (NUSANTARA, GARUDA, atau MERDEKA)
+// karena tidak menggunakan string atau strlen,
+// saya menghitung panjang kartu secara manual
+// dengan membaca satu per satu sampai menemukan '\0'
 
-// kalau panjang dan awalan tidak sesuai aturan
-// maka kartu dianggap "TIDAK DIKENAL" dan otomatis tidak valid
+// setelah panjang didapat, saya cek jenis kartu
+// berdasarkan jumlah digit dan 2 digit awal kartu
 
-// untuk algoritma validasi, saya menggunakan versi sederhana dari algoritma luhn
-// dan saya satukan dalam satu perulangan supaya lebih efisien
+// pengecekan awalan dilakukan langsung dengan membandingkan karakter,
+// misalnya NK[0] == '6' dan NK[1] == '5'
 
-// perulangan ini:
-// for (int i = panjang - 1; i >= 0; i--)
-// digunakan untuk membaca digit dari belakang ke depan
+// jika tidak memenuhi salah satu kondisi,
+// maka kartu dianggap tidak dikenal dan langsung dinyatakan tidak valid
 
-// untuk digit selang-seling dari belakang (digit ke-2, ke-4, dst)
-// nilainya saya kalikan 2
+// jika jenis kartu valid, program lanjut ke proses algoritma luhn
 
-// jika hasil perkalian lebih dari 9
-// maka digitnya dijumlahkan (contoh: 12 jadi 1 + 2)
+// pada perulangan pertama, saya menjumlahkan digit dari belakang
+// dengan selang satu digit (kanan ke kiri)
 
-// semua nilai kemudian dijumlahkan ke dalam variabel total
+// pada perulangan kedua, digit yang tersisa saya kalikan 2
+// jika hasilnya lebih dari 9, maka dijumlahkan kembali per digit
 
-// terakhir, dicek apakah total habis dibagi 10
-// jika iya berarti kartu valid, jika tidak berarti tidak valid
+// setiap digit diubah dari karakter ke angka menggunakan (NK[i] - '0')
+// karena input awal berupa ASCII, bukan angka langsung
+
+// setelah semua digit diproses, total akan dicek
+// jika total habis dibagi 10, maka kartu dinyatakan valid
+
+// jika tidak habis dibagi 10, maka kartu tidak valid
+
+// terakhir, program menampilkan hasil tipe kartu dan status validasinya
