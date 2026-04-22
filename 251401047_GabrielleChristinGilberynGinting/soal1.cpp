@@ -8,7 +8,6 @@ int main() {
     cout << "Masukkan nomor kartu digital: ";
     cin >> NK;
 
-    // hitung panjang manual
     while (NK[panjang] != '\0') {
         panjang++;
     }
